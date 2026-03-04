@@ -39,7 +39,7 @@ get_category_plugins() {
         blueteam)     echo "blue-team-soc blue-team-dfir blue-team-malware-analysis blue-team-siem blue-team-threat-intel blue-team-hardening blue-team-network-defense blue-team-edr" ;;
         reverse)      echo "reverse-binary reverse-malware reverse-protocol reverse-firmware reverse-obfuscation" ;;
         gamedev)      echo "gamedev-unity gamedev-unreal gamedev-threejs gamedev-godot gamedev-design" ;;
-        productivity) echo "memory-vault context-manager context-keeper hallucination-guard" ;;
+        productivity) echo "memory-vault context-manager context-keeper hallucination-guard token-tracker" ;;
         systems)      echo "os-internals cloud-security" ;;
         *)            echo "" ;;
     esac

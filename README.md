@@ -91,6 +91,7 @@ chmod +x install.sh
 | **Context Keeper** | `/context-keeper` | Maintains project context across sessions, auto-saves decisions and conventions |
 | **Context Manager** | `/context-manager` | Context window optimization, smart file loading |
 | **Hallucination Guard** | `/hallucination-guard` | Accuracy verification, confidence signaling, source validation |
+| **Token Tracker** | `/token-tracker` | Token usage tracking, cost estimation, and optimization tips per task |
 
 ### Red Team & Offensive Security
 
@@ -206,6 +207,7 @@ chmod +x install.sh
 /hallucination-guard Verify this API documentation matches the actual code
 /context-manager Optimize context for working on the authentication module
 /memory-vault save patterns This project uses repository pattern with DI
+/token-tracker report
 ```
 
 ## Selective Installation
