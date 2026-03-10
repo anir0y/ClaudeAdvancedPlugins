@@ -108,6 +108,15 @@ show_help() {
 
 install_plugin() {
     local plugin_name="$1"
+
+    # Only allow plugin names consisting of alphanumeric characters, hyphens, and underscores
+    case "$plugin_name" in
+        *[!a-zA-Z0-9_-]*)
+            echo -e "${RED}  [-] Invalid plugin name: $plugin_name${NC}"
+            return 1
+            ;;
+    esac
+
     local plugin_dir="$PLUGINS_DIR/$plugin_name/commands"
 
     if [ ! -d "$plugin_dir" ]; then
@@ -118,7 +127,8 @@ install_plugin() {
     local count=0
     for cmd_file in "$plugin_dir"/*.md; do
         if [ -f "$cmd_file" ]; then
-            local filename=$(basename "$cmd_file")
+            local filename
+            filename=$(basename "$cmd_file")
             TOTAL=$((TOTAL + 1))
 
             if [ -f "$CLAUDE_COMMANDS_DIR/$filename" ]; then
@@ -145,7 +155,8 @@ install_plugin() {
 
 install_category() {
     local category="$1"
-    local plugins=$(get_category_plugins "$category")
+    local plugins
+    plugins=$(get_category_plugins "$category")
 
     if [ -z "$plugins" ]; then
         echo -e "${RED}  [-] Unknown category: $category${NC}"
@@ -168,12 +179,14 @@ show_list() {
     echo ""
 
     for category in $ALL_CATEGORIES; do
-        local plugins=$(get_category_plugins "$category")
+        local plugins
+        plugins=$(get_category_plugins "$category")
         local total_cmds=0
 
         for plugin in $plugins; do
             if [ -d "$PLUGINS_DIR/$plugin/commands" ]; then
-                local cmd_count=$(ls -1 "$PLUGINS_DIR/$plugin/commands/"*.md 2>/dev/null | wc -l | tr -d ' ')
+                local cmd_count
+                cmd_count=$(find "$PLUGINS_DIR/$plugin/commands/" -maxdepth 1 -name "*.md" 2>/dev/null | wc -l)
                 total_cmds=$((total_cmds + cmd_count))
             fi
         done
@@ -184,7 +197,8 @@ show_list() {
                 echo -e "    ${CYAN}$plugin${NC}"
                 for cmd in "$PLUGINS_DIR/$plugin/commands/"*.md; do
                     if [ -f "$cmd" ]; then
-                        local cmd_name=$(basename "$cmd" .md)
+                        local cmd_name
+                        cmd_name=$(basename "$cmd" .md)
                         if [ -f "$CLAUDE_COMMANDS_DIR/$cmd_name.md" ]; then
                             echo -e "      └─ ${GREEN}/$cmd_name${NC} ${DIM}(installed)${NC}"
                         else
@@ -207,7 +221,8 @@ show_status() {
     echo ""
 
     for category in $ALL_CATEGORIES; do
-        local plugins=$(get_category_plugins "$category")
+        local plugins
+        plugins=$(get_category_plugins "$category")
         local cat_installed=0
         local cat_total=0
 
@@ -217,7 +232,8 @@ show_status() {
                     if [ -f "$cmd" ]; then
                         cat_total=$((cat_total + 1))
                         total_count=$((total_count + 1))
-                        local filename=$(basename "$cmd")
+                        local filename
+                        filename=$(basename "$cmd")
                         if [ -f "$CLAUDE_COMMANDS_DIR/$filename" ]; then
                             cat_installed=$((cat_installed + 1))
                             installed_count=$((installed_count + 1))
